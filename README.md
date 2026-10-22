@@ -78,7 +78,7 @@
 
 ```bash
 # 1. Run automated unit tests (5/5 passing — Zero external dependencies required!)
-python3 test_shift_engine.py
+python3 engine.py
 
 # 2. Launch the interactive Figma web dashboard (Built-in Python HTTPServer + SQLite)
 python3 app.py
