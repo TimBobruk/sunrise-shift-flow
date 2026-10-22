@@ -14,13 +14,12 @@
    - Schedules all **16 crew members** across a 30-day cycle while enforcing a hard cap of **2 days off (`OFF`)** per month (respecting pre-requested dates in `staff_exceptions`) and splitting the remaining 28 working shifts strictly **50/50** (**14 Morning `S1` + 14 Evening `S2`**).
 2. **0.018s Daily 7-Station Auto-Allocator:**
    - Assigns **7–8 active shift crew** across all **7 operational stations**:
-     1. `Hot Block-Massa #1`
-     2. `Hot Block-Massa #2`
-     3. `Large Hall (300 seats • ~680 guests / 2h • 2.27× turnover)`
-     4. `Grand Terrace (200 seats • ~420 guests / 2h • 2.10× turnover)`
-     5. `Small Hall (100 seats • ~200 guests / 2h • 2.00× Protected station)`
-     6. `Clean Dish Supply (Чиста посуда)`
-     7. `Dirty Dish Logistics (Брудна посуда)`
+     1. `Hot Block-Massa #1 & #2` (Covered by Acting Shift Lead in Dual-Block mode)
+     2. `Large Hall (300 seats • ~680 guests / 2h • 2.27× turnover)`
+     3. `Grand Terrace (200 seats • ~420 guests / 2h • 2.10× turnover)`
+     4. `Small Hall (100 seats • ~200 guests / 2h • 2.00× Protected station)`
+     5. `Clean Dish Supply (Чиста посуда)`
+     6. `Dirty Dish Logistics (Брудна посуда)`
    - Enforces **daily station rotation** (prevents assigning the same steward to `Dirty Dish` two days in a row) and places high-fatigue staff into the protected `Small Hall` zone.
 3. **Interactive Tour Group Quick-Slotter (`+Guests` Live DB Sync):**
    - Displays available hourly time windows (e.g., `17:00–18:00 • Grand Terrace`). Clicking an available slot prompts for incoming tour group size (**20–100 guests**), validates capacity against overbooking, and immediately increments both the hall's 2-hour guest flow and the global `1,300 guests` KPI counter, dynamically updating slider positions, turnover rates, and status colors.
@@ -82,5 +81,4 @@ python3 engine.py
 
 # 2. Launch the interactive Figma web dashboard (Built-in Python HTTPServer + SQLite)
 python3 app.py
-# Open http://127.0.0.1:5000 in Safari or Chrome
-```
+# Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in Safari or Chrome
