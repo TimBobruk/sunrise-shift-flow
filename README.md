@@ -4,7 +4,7 @@
 
 > **Operational Context:** Engineered from real operational experience as **Acting Shift Lead** at *Sunrise River Beach Resort* (Bulgaria). Designed to manage **600 seating capacity** handling **1,300 guests per 2-hour service window (2.17× table turnover)** across **3 dining halls**, **7 core stations**, and a **16-person monthly crew pool** deployed across **3 standalone restaurant instances**.
 
-![SunriseFlow Dashboard UI](assets/dashboard_preview.png)
+![SunriseFlow Dashboard UI](dashboard_preview.png)
 
 ---
 
