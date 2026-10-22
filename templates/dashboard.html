@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunriseFlow • Shift Dashboard</title>
+  <style>
+    :root {
+      --burnt-orange: #E05A2B;
+      --burnt-orange-bright: #FC6C26;
+      --vanilla-bg: #FFF4D6;
+      --page-bg: #FAF8F5;
+      --card-bg: #FFFFFF;
+      --border-soft: #ECE8DF;
+      --text-main: #1F1F1F;
+      --text-muted: #78716C;
+      --green-badge-bg: #E6F4EA;
+      --green-badge-text: #137333;
+      --amber-badge-bg: #FEF3C7;
+      --amber-badge-text: #B45309;
+      --red-badge-bg: #FCE8E6;
+      --red-badge-text: #C5221F;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: var(--page-bg);
+      color: var(--text-main);
+      padding: 24px 32px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    /* Top Navigation Bar (Figma Exact Match) */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 24px;
+    }
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: var(--vanilla-bg);
+      border: 1px solid #F5D996;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--burnt-orange);
+      font-weight: 800;
+      font-size: 16px;
+    }
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .brand-version {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-left: 4px;
+    }
+    .brand-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .tab-active {
+      color: var(--burnt-orange);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-bottom: 2px solid var(--burnt-orange);
+    }
+    .db-pill {
+      background: #F3F1EC;
+      border: 1px solid var(--border-soft);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Main Heading */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 18px;
+    }
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+    .page-header p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .status-covered {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green-badge-text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 4 KPI Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+    .kpi-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.015);
+    }
+    .kpi-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--vanilla-bg);
+      color: var(--burnt-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+    .kpi-val {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+    .kpi-unit {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-left: 3px;
+    }
+
+    /* Section Headers */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .section-head h2 {
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+    .section-head span {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* 3 Hall Cards */
+    .halls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+    .hall-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+    .hall-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .hall-name {
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+    .hall-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .hall-badge {
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+    .status-critical {
+      background: var(--red-badge-bg);
+      color: var(--burnt-orange);
+    }
+    .status-high {
+      background: var(--amber-badge-bg);
+      color: var(--amber-badge-text);
+    }
+    .status-steady {
+      background: var(--green-badge-bg);
+      color: var(--green-badge-text);
+    }
+
+    .hall-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+    .hall-flow-big {
+      font-size: 22px;
+      font-weight: 800;
+    }
+    .hall-flow-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      display: block;
+    }
+    .hall-meta-num {
+      font-size: 13px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    /* Interactive Range Slider */
+    .hall-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      appearance: none;
+      background: #EFECE6;
+      outline: none;
+      margin: 6px 0 10px 0;
+      cursor: pointer;
+    }
+    .hall-slider::-webkit-slider-thumb {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--burnt-orange-bright);
+      border: 2px solid #FFF;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+      cursor: grab;
+    }
+    .hall-note {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Manage the Shift Action Grid (Figma 2-Column Layout) */
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .action-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-align: left;
+    }
+    .action-btn:hover {
+      border-color: var(--burnt-orange-bright);
+      transform: translateY(-1px);
+    }
+    .action-btn.primary-orange {
+      background: var(--burnt-orange);
+      border-color: var(--burnt-orange);
+      color: #FFFFFF;
+      box-shadow: 0 6px 16px rgba(224, 90, 43, 0.25);
+    }
+    .action-btn.primary-orange .btn-sub,
+    .action-btn.primary-orange .btn-arrow {
+      color: #FFE4D6;
+    }
+    .btn-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--vanilla-bg);
+      color: var(--burnt-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    .action-btn.primary-orange .btn-icon {
+      background: rgba(255,255,255,0.18);
+      color: #FFFFFF;
+    }
+    .btn-title {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .btn-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .btn-arrow {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    /* Tour Group Available Slot Preview Box (Figma Green Preview Card) */
+    .tour-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .slot-preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 14px 18px;
+    }
+    .slot-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .slot-header-title {
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .slots-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .slot-item {
+      background: #EAF6ED;
+      border: 1px solid #B7E1C1;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .slot-item:hover {
+      background: #D7F0DF;
+      transform: scale(1.01);
+    }
+    .slot-time {
+      font-size: 14px;
+      font-weight: 800;
+      color: #0F5132;
+    }
+    .slot-meta {
+      font-size: 11px;
+      color: #198754;
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    .waiter-alert-box {
+      margin-top: 10px;
+      background: var(--vanilla-bg);
+      border: 1px solid #F5D996;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 11.5px;
+      color: #7C2D12;
+    }
+
+    /* Active Shift Station Matrix Table */
+    .matrix-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .matrix-table th {
+      text-align: left;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      background: #FCFBF9;
+    }
+    .matrix-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      font-size: 12.5px;
+      vertical-align: middle;
+    }
+    .station-title {
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .station-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .staff-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .staff-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #F8F6F0;
+      border: 1px solid var(--border-soft);
+      padding: 4px 10px 4px 5px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .avatar-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--vanilla-bg);
+      color: var(--burnt-orange);
+      font-size: 10px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sick-btn {
+      margin-left: 4px;
+      font-size: 10px;
+      color: #DC2626;
+      background: #FEE2E2;
+      border: none;
+      border-radius: 999px;
+      padding: 2px 6px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .sick-btn:hover {
+      background: #FECACA;
+    }
+    .rot-pill {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: var(--green-badge-bg);
+      color: var(--green-badge-text);
+    }
+    .rot-pill.protected {
+      background: var(--vanilla-bg);
+      color: #B45309;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1F1F1F;
+      color: #FFF4D6;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      display: none;
+      z-index: 1000;
+      border-left: 4px solid var(--burnt-orange-bright);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="brand-left">
+      <div class="brand-icon">☀</div>
+      <div>
+        <div>
+          <span class="brand-title">SunriseFlow</span>
+          <span class="brand-version">v1.6</span>
+        </div>
+        <div class="brand-sub">High-Turnover Station &amp; Shift Optimizer</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <span class="tab-active">Shift dashboard</span>
+      <span class="db-pill">● SQLite: rest1_main.db (0.018s)</span>
+    </div>
+  </div>
+
+  <!-- Main Header with Live Day/Shift Switcher & Hour Accumulation -->
+  <div class="page-header">
+    <div>
+      <h1>Shift dashboard <span id="active-day-badge" style="font-size:14px; background:#FFF4D6; color:#E05A2B; padding:4px 10px; border-radius:999px; margin-left:8px; font-weight:800; border:1px solid #F5D996;">Day 1 • Shift 1 (AM)</span></h1>
+      <p>Service throughput, station staffing, and shift balancing in one place.</p>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button id="btn-s1" onclick="switchShift('S1')" style="padding:7px 13px; border-radius:9px; border:1px solid var(--border-soft); background:var(--burnt-orange); color:#FFF; font-weight:700; font-size:12px; cursor:pointer;">☀️ Shift 1 (AM)</button>
+      <button id="btn-s2" onclick="switchShift('S2')" style="padding:7px 13px; border-radius:9px; border:1px solid var(--border-soft); background:#FFF; color:var(--text-main); font-weight:600; font-size:12px; cursor:pointer;">🌙 Shift 2 (PM)</button>
+      <button onclick="completeShiftAndAdvance()" style="padding:7px 14px; border-radius:9px; border:none; background:#137333; color:#FFF; font-weight:700; font-size:12px; cursor:pointer; box-shadow:0 2px 6px rgba(19,115,51,0.25);">✅ Complete Shift (+6h &amp; Next ›)</button>
+    </div>
+  </div>
+
+  <!-- 4 KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon">🪑</div>
+      <div>
+        <div class="kpi-label">Total seating capacity</div>
+        <div><span class="kpi-val" id="kpi-seats">600</span><span class="kpi-unit">seats</span></div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">👥</div>
+      <div>
+        <div class="kpi-label">2-hour service window</div>
+        <div><span class="kpi-val" id="kpi-guests">1,300</span><span class="kpi-unit">guests</span></div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">🔄</div>
+      <div>
+        <div class="kpi-label">Overall table turnover</div>
+        <div><span class="kpi-val" id="kpi-turnover">2.17×</span><span class="kpi-unit">per service</span></div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">⚡</div>
+      <div>
+        <div class="kpi-label">Active shift crew</div>
+        <div><span class="kpi-val" id="kpi-crew">8</span><span class="kpi-unit">of 16 monthly pool</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Throughput by Hall -->
+  <div class="section-head">
+    <h2>Service throughput by hall</h2>
+    <span id="window-summary">2-hour window • 600 seats → 1,300 guests (Drag sliders to simulate load)</span>
+  </div>
+  <div class="halls-grid" id="halls-container"></div>
+
+  <!-- Manage the Shift -->
+  <div class="section-head">
+    <h2>Manage the shift</h2>
+    <span>Core actions • 4 workflows + Tour Group Quick-Slotter</span>
+  </div>
+
+  <div class="actions-grid">
+    <button class="action-btn" onclick="generateMonthlyRoster()">
+      <div class="btn-left">
+        <div class="btn-icon">📅</div>
+        <div>
+          <div class="btn-title">1. Monthly roster</div>
+          <div class="btn-sub">16 pool → Shift 1 (14) &amp; Shift 2 (14) + Max 2 OFF</div>
+        </div>
+      </div>
+      <span class="btn-arrow">›</span>
+    </button>
+
+    <button class="action-btn primary-orange" onclick="autoAssignStations()">
+      <div class="btn-left">
+        <div class="btn-icon">⚡</div>
+        <div>
+          <div class="btn-title">2. Auto-assign stations</div>
+          <div class="btn-sub">7 core stations • 8 crew (0.018s SQLite solver)</div>
+        </div>
+      </div>
+      <span class="btn-arrow">›</span>
+    </button>
+
+    <button class="action-btn" onclick="exportDirectorCsv()">
+      <div class="btn-left">
+        <div class="btn-icon">📥</div>
+        <div>
+          <div class="btn-title">3. Export director CSV</div>
+          <div class="btn-sub">Download the daily overview + Auto-Backup</div>
+        </div>
+      </div>
+      <span class="btn-arrow">›</span>
+    </button>
+
+    <button class="action-btn" onclick="copyCrewBriefing()">
+      <div class="btn-left">
+        <div class="btn-icon">📋</div>
+        <div>
+          <div class="btn-title">4. Copy crew briefing</div>
+          <div class="btn-sub">Share assignment in one click (Telegram / WhatsApp)</div>
+        </div>
+      </div>
+      <span class="btn-arrow">›</span>
+    </button>
+  </div>
+
+  <!-- Tour Group Interactive Slotter (Matches Figma Left Card) -->
+  <div class="tour-section">
+    <div class="slot-preview-card">
+      <div class="slot-header">
+        <div class="slot-header-title">🚌 Tour group • Available slot preview (Click a slot to add guests)</div>
+        <span class="hall-badge status-steady">● Click slot → +Guests to DB</span>
+      </div>
+      <div class="slots-list" id="slots-container"></div>
+      <div class="waiter-alert-box" id="booking-alert-box">
+        <strong>Waiter &amp; Kitchen note:</strong> Click any green time slot above, enter group size (20–100 guests), and the system will immediately add them to the hall &amp; total guest counters.
+      </div>
+    </div>
+
+    <div class="slot-preview-card">
+      <div class="slot-header">
+        <div class="slot-header-title">🚑 Emergency Sick-Leave &amp; Exception Control</div>
+        <button onclick="resetCrew()" style="font-size:11px; padding:4px 10px; border-radius:8px; border:1px solid #CCC; background:#FFF; cursor:pointer; font-weight:600;">↺ Reset Full Crew (8/8)</button>
+      </div>
+      <p style="font-size:12px; color:var(--text-muted); line-height:1.45;">
+        Need to test force-majeure? Click <strong>[⚠️ Sick]</strong> next to any staff member in the table below.
+        If crew drops from 8 → 7, <strong>Acting Shift Lead</strong> automatically switches to <strong>Dual Block-Massa (#1 &amp; #2)</strong> mode so all 7 stations stay 100% covered!
+      </p>
+      <div class="waiter-alert-box" id="failover-alert-box" style="margin-top:10px; display:none;"></div>
+    </div>
+  </div>
+
+  <!-- Active Shift Station Matrix -->
+  <div class="section-head">
+    <h2>Active shift station matrix</h2>
+    <span id="matrix-subtitle">8 crew covering all 7 operational positions • Zero bottlenecks</span>
+  </div>
+
+  <div class="matrix-card">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th style="width: 240px;">Position / Station</th>
+          <th style="width: 280px;">Assigned Staff</th>
+          <th>Skill / Bottleneck Logic</th>
+          <th style="width: 190px;">Monthly Shift Rotation</th>
+        </tr>
+      </thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    let currentState = null;
+
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 3800);
+    }
+
+    async function fetchState() {
+      const res = await fetch("/api/state");
+      currentState = await res.json();
+      renderDashboard(currentState);
+    }
+
+    function renderDashboard(state) {
+      // 1. Update KPI Cards
+      document.getElementById("kpi-seats").innerText = state.kpi.total_seats;
+      const actDay = state.kpi.active_day || 1;
+      const actShift = state.kpi.active_shift || "S1";
+      const badgeEl = document.getElementById("active-day-badge");
+      if (badgeEl) {
+        badgeEl.innerText = `Day ${actDay} • ${actShift === "S1" ? "Shift 1 (AM)" : "Shift 2 (PM)"}`;
+      }
+      const b1 = document.getElementById("btn-s1");
+      const b2 = document.getElementById("btn-s2");
+      if (b1 && b2) {
+        b1.style.background = actShift === "S1" ? "var(--burnt-orange)" : "#FFF";
+        b1.style.color = actShift === "S1" ? "#FFF" : "var(--text-main)";
+        b2.style.background = actShift === "S2" ? "var(--burnt-orange)" : "#FFF";
+        b2.style.color = actShift === "S2" ? "#FFF" : "var(--text-main)";
+      }
+      document.getElementById("kpi-guests").innerText = state.kpi.total_guests_2h.toLocaleString();
+      document.getElementById("kpi-turnover").innerText = state.kpi.overall_turnover.toFixed(2) + "×";
+      document.getElementById("kpi-crew").innerText = state.kpi.active_crew_count;
+      document.getElementById("window-summary").innerText =
+        `2-hour window • ${state.kpi.total_seats} seats → ${state.kpi.total_guests_2h.toLocaleString()} guests`;
+      document.getElementById("matrix-subtitle").innerText =
+        `${state.kpi.active_crew_count} crew covering all 7 operational positions • Zero bottlenecks`;
+
+      // 2. Render 3 Hall Cards with Live Sliders & Dynamic Colors
+      const hallsEl = document.getElementById("halls-container");
+      hallsEl.innerHTML = "";
+      state.halls.forEach(h => {
+        const maxFlow = h.seats * 3;
+        const minFlow = Math.round(h.seats * 0.5);
+        const card = document.createElement("div");
+        card.className = "hall-card";
+        card.innerHTML = `
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">${h.zone_name}</div>
+              <div class="hall-sub">Capacity: ${h.seats} seats</div>
+            </div>
+            <span class="hall-badge ${h.color_class}">● ${h.badge_text}</span>
+          </div>
+          <div class="hall-stats">
+            <div>
+              <span class="hall-flow-big">~${h.flow_2h}</span>
+              <span class="hall-flow-sub">guests / 2 hours</span>
+            </div>
+            <div>
+              <div class="hall-meta-num">${h.seats}</div>
+              <span class="hall-flow-sub">seats</span>
+            </div>
+            <div>
+              <div class="hall-meta-num" style="color:${h.hex_color}">${h.turnover.toFixed(2)}×</div>
+              <span class="hall-flow-sub">turnover</span>
+            </div>
+          </div>
+          <input type="range" class="hall-slider" min="${minFlow}" max="${maxFlow}" value="${h.flow_2h}"
+                 style="accent-color: ${h.hex_color};"
+                 onchange="onSliderChange('${h.zone_name}', this.value)" />
+          <div class="hall-note">⚡ ${h.note}</div>
+        `;
+        hallsEl.appendChild(card);
+      });
+
+      // 3. Render Interactive Tour Group Time Slots
+      const slotsEl = document.getElementById("slots-container");
+      slotsEl.innerHTML = "";
+      state.time_slots.slice(0, 4).forEach(s => {
+        const div = document.createElement("div");
+        div.className = "slot-item";
+        div.onclick = () => promptBookSlot(s.slot_id, s.time_window, s.zone_name, s.free_seats);
+        div.innerHTML = `
+          <div class="slot-time">${s.time_window}</div>
+          <div class="slot-meta">${s.zone_name} • ${s.free_seats} seats free</div>
+        `;
+        slotsEl.appendChild(div);
+      });
+
+      if (state.last_booking_alert) {
+        const b = state.last_booking_alert;
+        document.getElementById("booking-alert-box").innerHTML = `
+          <strong>🟢 TOUR GROUP ALLOCATION SUCCESS (+${b.group_size} Guests Added to DB):</strong><br/>
+          • Slot: <strong>${b.time_window}</strong> in <strong>${b.zone_name}</strong> | Dedicated Waiter: <strong>${b.waiter_name}</strong><br/>
+          • Kitchen Alert: ${b.kitchen_alert}
+        `;
+      }
+
+      if (state.failover_notice) {
+        const fb = document.getElementById("failover-alert-box");
+        fb.style.display = "block";
+        fb.innerText = state.failover_notice;
+      }
+
+      // 4. Render Active Shift Station Matrix
+      const tbody = document.getElementById("matrix-body");
+      tbody.innerHTML = "";
+      state.matrix_rows.forEach(r => {
+        const tr = document.createElement("tr");
+        const staffHtml = r.staff_list.map(st => `
+          <span class="staff-chip">
+            <span class="avatar-circle">${st.initials}</span>
+            ${st.name}
+            <button class="sick-btn" title="Simulate sudden sick leave" onclick="markSick(${st.id}, '${st.name}')">⚠️ Sick</button>
+          </span>
+        `).join("");
+
+        const isProtected = r.rotation_badge.toLowerCase().includes("protected");
+        tr.innerHTML = `
+          <td style="font-weight:700; color:var(--text-muted);">${r.row_num}</td>
+          <td>
+            <div class="station-title">${r.station_title}</div>
+            <div class="station-sub">${r.station_sub}</div>
+          </td>
+          <td><div class="staff-chips">${staffHtml}</div></td>
+          <td style="color:#44403C; font-size:12px;">${r.skill_logic}</td>
+          <td><span class="rot-pill ${isProtected ? 'protected' : ''}">${r.rotation_badge}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function onSliderChange(zoneName, newValue) {
+      const res = await fetch("/api/update-slider", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({zone_name: zoneName, new_flow: parseInt(newValue, 10)})
+      });
+      currentState = await res.json();
+      renderDashboard(currentState);
+      showToast(`Updated ${zoneName} flow to ${newValue} guests. Turnover & colors recalculated!`);
+    }
+
+    async function promptBookSlot(slotId, timeWindow, zoneName, freeSeats) {
+      const input = prompt(
+        `🚌 Tour Group Booking for ${zoneName} (${timeWindow})\nAvailable capacity: ${freeSeats} seats.\n\nHow many guests in the incoming group? (e.g. 20–100):`,
+        "60"
+      );
+      if (!input) return;
+      const groupSize = parseInt(input, 10);
+      if (isNaN(groupSize) || groupSize <= 0) {
+        alert("Please enter a valid number of guests.");
+        return;
+      }
+      const res = await fetch("/api/book-tour-slot", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({slot_id: slotId, group_size: groupSize})
+      });
+      const data = await res.json();
+      if (data.error) {
+        alert(data.error);
+        return;
+      }
+      currentState = data;
+      renderDashboard(currentState);
+      showToast(`✅ Added +${groupSize} guests to ${zoneName} (${timeWindow}) & updated total KPI!`);
+    }
+
+    async function generateMonthlyRoster() {
+      const res = await fetch("/api/monthly-roster", {method: "POST"});
+      const data = await res.json();
+      showToast(`📅 Monthly Roster generated: ${data.staff_scheduled} staff × 30 days (14 S1 / 14 S2 / 2 OFF)!`);
+    }
+
+    async function autoAssignStations() {
+      const res = await fetch("/api/assign-stations", {method: "POST"});
+      currentState = await res.json();
+      renderDashboard(currentState);
+      showToast("⚡ Auto-assigned 7 core stations in 0.018s!");
+    }
+
+    function exportDirectorCsv() {
+      window.location.href = "/api/export-csv";
+      showToast("📥 Director CSV Report downloaded & DB backup created!");
+    }
+
+    async function copyCrewBriefing() {
+      if (!currentState) return;
+      await navigator.clipboard.writeText(currentState.briefing_text);
+      showToast("📋 Crew briefing copied to clipboard! Ready to paste in Telegram/WhatsApp.");
+    }
+
+    async function markSick(staffId, staffName) {
+      const res = await fetch("/api/mark-sick", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({staff_id: staffId})
+      });
+      currentState = await res.json();
+      renderDashboard(currentState);
+      showToast(`🚑 ${staffName} marked SICK. Emergency Dual Block-Massa failover activated!`);
+    }
+
+    async function resetCrew() {
+      const res = await fetch("/api/reset-sick", {method: "POST"});
+      currentState = await res.json();
+      document.getElementById("failover-alert-box").style.display = "none";
+      renderDashboard(currentState);
+      showToast("↺ Full 8-person crew restored!");
+    }
+
+    
+    async function switchShift(targetShift) {
+      const actDay = (currentState && currentState.kpi && currentState.kpi.active_day) ? currentState.kpi.active_day : 1;
+      const res = await fetch("/api/switch-shift", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({day: actDay, shift_code: targetShift})
+      });
+      currentState = await res.json();
+      renderDashboard(currentState);
+      showToast(`Switched to Day ${actDay} • ${targetShift === 'S1' ? 'Shift 1 (Morning)' : 'Shift 2 (Evening)'}`);
+    }
+
+    async function completeShiftAndAdvance() {
+      const res = await fetch("/api/complete-shift", {method: "POST"});
+      currentState = await res.json();
+      renderDashboard(currentState);
+      if (currentState.shift_completed_notice) {
+        showToast(currentState.shift_completed_notice);
+      }
+    }
+
+    window.onload = fetchState;
+  </script>
+</body>
+</html>

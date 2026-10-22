@@ -1,0 +1,35 @@
+SUNRISE RESORT — DIRECTOR SHIFT OPERATIONS REPORT
+Generated At,2026-10-22 21:28:20
+Shift,Day 1 (S2)
+Total Seating Capacity,600
+2-Hour Guest Volume,1246
+Table Turnover Rate,2.08x
+Active Shift Crew,8 / 16
+Management Time Saved,36 minutes (-66.7% vs manual paper scheduling)
+
+Station #,Position / Hall,Assigned Crew,Skill & Bottleneck Logic,Rotation Status
+1–2,Hot Block-Massa #1 & #2,"Petar D., Georgi K.",Tier 3 • Acting Lead covers BOTH Block #1 & #2 on peak,50% Shift 1 / 50% Shift 2
+3,Large Hall,"Ivan P., Milena G.",Tier 2 • High-speed table reset (2.26x turnover),Rotated from Shift 1
+4,Grand Terrace,Viktoria T.,Tier 2 • Fast outdoor table turnover (2.10x),Balanced monthly hours
+5,Small Hall,Anna L.,Tier 2 • Protected station (after heavy shift / 30.5h),Protected (Easy station today)
+6,Clean Dish Supply,Stefan R.,"Tier 2 • Non-stop plate restocking for 1,300 guests",50% AM / 50% PM
+7,Dirty Dish Logistics,Desislava N.,Tier 2 • High-load dish clearing & trolley flow,Rotated station daily
+
+30-DAY MONTHLY SCHEDULE MATRIX (14 S1 / 14 S2 / 2 OFF)
+Staff Code,Name,Role,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,D16,D17,D18,D19,D20,D21,D22,D23,D24,D25,D26,D27,D28,D29,D30,S1,S2,OFF
+ST-01,Acting Shift Lead,Acting Shift Lead,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,14,14,2
+ST-02,Georgi K.,Hot Line Specialist,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,14,14,2
+ST-03,Elena M.,Senior Hall Waiter,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,14,14,2
+ST-04,Ivan P.,Hall Waiter,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,14,14,2
+ST-05,Dimitar V.,Terrace Specialist,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,14,14,2
+ST-06,Anna L.,Small Hall Waiter,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,14,14,2
+ST-07,Nikolai K.,Clean Dish Steward,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,14,14,2
+ST-08,Stefan R.,Dirty Dish Steward,S2,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,14,14,2
+ST-09,Maria S.,Hot Line Specialist,S1,S2,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,14,14,2
+ST-10,Petar D.,Senior Hall Waiter,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,14,14,2
+ST-11,Kaloyan T.,Hall Waiter,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,14,14,2
+ST-12,Viktoria T.,Terrace Specialist,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,14,14,2
+ST-13,Hristo B.,Small Hall Waiter,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,14,14,2
+ST-14,Desislava N.,Clean Dish Steward,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,14,14,2
+ST-15,Yordan M.,Dirty Dish Steward,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,14,14,2
+ST-16,Milena G.,Relief Floater,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,14,14,2

@@ -1,0 +1,30 @@
+{
+  "restaurant_instance": "Restaurant #1 — Main Flagship",
+  "database_file": "rest1_main.db",
+  "total_seating_capacity": 600,
+  "default_2h_guest_window": 1300,
+  "monthly_staff_pool": 16,
+  "days_in_month": 30,
+  "max_days_off_per_month": 2,
+  "target_s1_shifts": 14,
+  "target_s2_shifts": 14,
+  "halls": {
+    "Large Hall": {
+      "seats": 300,
+      "default_2h_flow": 680
+    },
+    "Grand Terrace": {
+      "seats": 200,
+      "default_2h_flow": 420
+    },
+    "Small Hall": {
+      "seats": 100,
+      "default_2h_flow": 200
+    }
+  },
+  "ui_palette": {
+    "primary_burnt_orange": "#FC6C26",
+    "secondary_vanilla": "#FFF4D6",
+    "text_dark": "#1F1F1F"
+  }
+}
