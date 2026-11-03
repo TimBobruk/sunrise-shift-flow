@@ -1,21 +1,23 @@
-DROP TABLE IF EXISTS system_state;
--- Sunrise-Shift-Flow v1.6 Relational Database Schema (SQLite)
--- Standalone Multi-Restaurant Architecture (600 Seats / 1,300 Guests per 2h Service)
+-- schema.sql
+-- Relational schema for SunriseFlow (9 tables, SQLite 3)
 
-DROP TABLE IF EXISTS tour_groups;
+PRAGMA foreign_keys = ON;
+
 DROP TABLE IF EXISTS daily_roster;
-DROP TABLE IF EXISTS staff_exceptions;
 DROP TABLE IF EXISTS monthly_schedule;
+DROP TABLE IF EXISTS staff_exceptions;
+DROP TABLE IF EXISTS tour_groups;
 DROP TABLE IF EXISTS zone_time_slots;
 DROP TABLE IF EXISTS hall_metrics;
 DROP TABLE IF EXISTS stations;
 DROP TABLE IF EXISTS staff;
+DROP TABLE IF EXISTS system_state;
 
 CREATE TABLE staff (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    staff_code TEXT NOT NULL,
+    staff_code TEXT NOT NULL UNIQUE,
     name TEXT NOT NULL,
-    role_title TEXT NOT NULL,           -- 'Acting Shift Lead', 'Wait Staff', 'Dish Steward'
+    role_title TEXT NOT NULL,
     experience_tier INTEGER NOT NULL CHECK(experience_tier BETWEEN 1 AND 3),
     dual_block_capable INTEGER DEFAULT 0 CHECK(dual_block_capable IN (0, 1)),
     weekly_hours REAL DEFAULT 0.0,
@@ -40,9 +42,9 @@ CREATE TABLE hall_metrics (
 
 CREATE TABLE zone_time_slots (
     slot_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    time_window TEXT NOT NULL,          -- e.g. '17:00-18:00'
-    zone_name TEXT NOT NULL,            -- 'Large Hall', 'Grand Terrace', 'Small Hall'
-    max_capacity INTEGER NOT NULL,      -- 300, 200, 100
+    time_window TEXT NOT NULL,
+    zone_name TEXT NOT NULL,
+    max_capacity INTEGER NOT NULL,
     booked_guests INTEGER DEFAULT 0 CHECK(booked_guests >= 0)
 );
 
@@ -88,4 +90,5 @@ CREATE TABLE system_state (
     active_day INTEGER NOT NULL DEFAULT 1,
     active_shift TEXT NOT NULL DEFAULT 'S1'
 );
+
 INSERT INTO system_state (id, active_day, active_shift) VALUES (1, 1, 'S1');
