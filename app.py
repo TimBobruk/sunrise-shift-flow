@@ -1,11 +1,3 @@
-"""
-app.py — Zero-Dependency Web Server & REST API (Built-in Python Standard Library)
-Connects the Figma UI (templates/dashboard.html) to SQLite and engine.py.
-
-Run locally on MacBook (Zero pip packages required!):
-    python3 app.py
-Then open http://127.0.0.1:5000 in Safari or Chrome.
-"""
 import os
 import json
 import sqlite3
@@ -31,7 +23,6 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 def resolve_template_path() -> str:
-    """Support dashboard.html in either templates/dashboard.html or root directory."""
     candidate_1 = os.path.join(BASE_DIR, "templates", "dashboard.html")
     candidate_2 = os.path.join(BASE_DIR, "dashboard.html")
     if os.path.exists(candidate_1):
@@ -42,10 +33,7 @@ def resolve_template_path() -> str:
 
 
 def ensure_initialized():
-    """
-    Initialize SQLite database automatically on launch, or repair if tables/rosters are empty.
-    Also generates Monthly_Schedule_30_Days.csv and Day 1 station assignments immediately.
-    """
+    # Make sure DB exists and has baseline seed rows before handling requests
     needs_init = not os.path.exists(DEFAULT_DB_PATH)
     if not needs_init:
         try:
@@ -110,7 +98,7 @@ class SunriseRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         parsed = urlparse(self.path)
-        if parsed.path == "/" or parsed.path == "/index.html":
+        if parsed.path in ("/", "/index.html"):
             tpl_path = resolve_template_path()
             with open(tpl_path, "r", encoding="utf-8") as f:
                 html_bytes = f.read().encode("utf-8")
@@ -240,6 +228,6 @@ if __name__ == "__main__":
     ensure_initialized()
     port = 5000
     server = HTTPServer(("127.0.0.1", port), SunriseRequestHandler)
-    print(f"🌅 SunriseFlow v1.6 running at http://127.0.0.1:{port}")
-    print("Press Ctrl+C to stop the server.")
+    print(f"[INFO] SunriseFlow server listening on http://127.0.0.1:{port}")
+    print("[INFO] Press Ctrl+C to stop.")
     server.serve_forever()
