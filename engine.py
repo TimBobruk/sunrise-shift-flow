@@ -9,12 +9,8 @@ BACKUPS_DIR = os.path.join(BASE_DIR, "backups")
 
 
 def classify_hall_status(flow_2h: int, seats: int) -> dict:
-    """
-    Calculate table turnover and visual status (color & badge) for a dining hall.
-    - Turnover >= 2.20x -> Critical turnover (Burnt Orange / Red #FC6C26)
-    - Turnover 2.05x..2.19x -> High turnover (Amber #D97706)
-    - Turnover < 2.05x -> Steady flow (Green #059669)
-    """
+    # Thresholds tuned from summer 2025 service logs:
+    # >= 2.20x requires fast table reset, 2.05-2.19x is high load, < 2.05x is normal
     turnover = round(flow_2h / seats, 2) if seats > 0 else 0.0
     fill_pct = min(100, max(10, int(round((flow_2h / (seats * 2.5)) * 100))))
 
@@ -48,10 +44,6 @@ def classify_hall_status(flow_2h: int, seats: int) -> dict:
 
 
 def export_monthly_schedule_csv(conn: sqlite3.Connection, total_days: int = 30) -> str:
-    """
-    Create a standalone CSV document with the full 30-day schedule for all 16 staff members.
-    Saves both in the project root (Monthly_Schedule_30_Days.csv) and in exports/.
-    """
     os.makedirs(EXPORTS_DIR, exist_ok=True)
     cursor = conn.cursor()
 
@@ -99,12 +91,8 @@ def export_monthly_schedule_csv(conn: sqlite3.Connection, total_days: int = 30) 
 
 
 def generate_monthly_roster(conn: sqlite3.Connection, total_days: int = 30) -> dict:
-    """
-    Button 1: Generate a 30-day schedule for 16 staff members AND save Monthly_Schedule_30_Days.csv.
-    Enforces strict equity:
-    - Exactly 2 days OFF per person (respecting pre-requested days in staff_exceptions)
-    - Exactly 14 Shift 1 (S1) and 14 Shift 2 (S2) per person (28 active shifts)
-    """
+    # Build 30-day roster: 2 OFF days and 14 S1 / 14 S2 shifts per person.
+    # TODO: replace greedy modulo offset with constraint solver if pool grows > 30 staff
     cursor = conn.cursor()
     cursor.execute("DELETE FROM monthly_schedule;")
 
@@ -175,11 +163,8 @@ def generate_monthly_roster(conn: sqlite3.Connection, total_days: int = 30) -> d
 
 
 def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: str = "S1") -> list:
-    """
-    Button 2: Auto-assign active shift crew (7-8 staff) across all 7 operational stations.
-    Respects role specialization (Shift Lead / Hot Line, Dish Stewards, Terrace & Hall Waiters),
-    yesterday's Dirty Dish rotation protection, and Small Hall protection for highest weekly_hours staff.
-    """
+    # Allocate active shift crew across all 7 stations.
+    # Rules: avoid consecutive days on Dirty Dish (#7) and route tired staff to Small Hall (#5).
     cursor = conn.cursor()
 
     cursor.execute("SELECT COUNT(*) AS cnt FROM monthly_schedule;")
@@ -208,6 +193,7 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
     )
     crew = [dict(r) for r in cursor.fetchall()]
 
+    # Fallback: pull available staff with lowest hours if sick leaves drop active crew below 7
     if len(crew) < 7:
         existing_ids = {c["id"] for c in crew}
         cursor.execute(
@@ -249,7 +235,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
 
     assignments = []
 
-    # 1. Station 1: Hot Block-Massa #1 (Prioritize Acting Shift Lead, then dual_block_capable / Hot Line)
     lead = pick_next(lambda c: c["role_title"] == "Acting Shift Lead") or pick_next(
         lambda c: c["dual_block_capable"] == 1 or "Hot Line" in c["role_title"]
     )
@@ -261,7 +246,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
             "50% Shift 1 / 50% Shift 2",
         ))
 
-    # 2. Station 5: Small Hall (100 seats) -> Protected station for highest weekly_hours waiter/staff
     remaining_non_dish = [
         c for c in crew if c["id"] not in used_ids and "Dish" not in c["role_title"] and "Hot Line" not in c["role_title"]
     ]
@@ -276,7 +260,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
             "Protected (Easy station today)",
         ))
 
-    # 3. Station 7: Dirty Dish Logistics -> Prefer Dish Steward who didn't work station 7 yesterday
     dirty_steward = (
         pick_next(lambda c: "Dish" in c["role_title"] and c["id"] not in yesterday_dirty_ids)
         or pick_next(lambda c: c["id"] not in yesterday_dirty_ids)
@@ -289,7 +272,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
             "Rotated station daily",
         ))
 
-    # 4. Station 6: Clean Dish Supply -> Prefer remaining Dish Steward
     clean_steward = pick_next(lambda c: "Dish" in c["role_title"])
     if clean_steward:
         assignments.append((
@@ -299,7 +281,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
             "50% AM / 50% PM",
         ))
 
-    # 5. Station 4: Grand Terrace (200 seats) -> Prefer Terrace Specialist
     terrace_waiter = pick_next(lambda c: "Terrace" in c["role_title"])
     if terrace_waiter:
         assignments.append((
@@ -309,7 +290,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
             "Balanced monthly hours",
         ))
 
-    # 6. Station 3: Large Hall (300 seats) -> Prefer Senior Hall Waiter / Hall Waiter
     lh_waiter_1 = pick_next(lambda c: "Hall Waiter" in c["role_title"])
     if lh_waiter_1:
         assignments.append((
@@ -319,7 +299,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
             "Rotated from Shift 1",
         ))
 
-    # 7. Station 2: Hot Block-Massa #2 -> Prefer Hot Line Specialist / dual_block_capable
     sixth_or_seventh = pick_next(lambda c: "Hot Line" in c["role_title"] or c["dual_block_capable"] == 1)
     if sixth_or_seventh:
         assignments.append((
@@ -329,7 +308,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
             "50% Shift 1 / 50% Shift 2",
         ))
 
-    # 8. 2nd Waiter on Station 3: Large Hall (300 seats peak)
     eighth_crew = pick_next()
     if eighth_crew:
         assignments.append((
@@ -355,7 +333,6 @@ def assign_daily_stations(conn: sqlite3.Connection, day: int = 1, shift_code: st
 def update_hall_flow(
     conn: sqlite3.Connection, zone_name: str, new_flow: int, day: int = 1, shift_code: str = "S1"
 ) -> dict:
-    """Update 2h guest flow for a dining hall when its slider moves and recalculate KPIs."""
     clamped_flow = max(20, min(1200, int(new_flow)))
     cursor = conn.cursor()
     cursor.execute(
@@ -374,7 +351,6 @@ def book_tour_group_slot(
     day: int = 1,
     shift_code: str = "S1",
 ) -> dict:
-    """Interactive Popup Action for Tour Group Booking."""
     group_size = int(group_size)
     if group_size < 1 or group_size > 200:
         return {"error": "Group size must be between 1 and 200 guests."}
@@ -441,7 +417,7 @@ def book_tour_group_slot(
 def trigger_sick_leave_failover(
     conn: sqlite3.Connection, staff_id: int, day: int = 1, shift_code: str = "S1"
 ) -> dict:
-    """Emergency Failover: Marks a staff member as SICK_LEAVE for today and re-allocates stations."""
+    # Quick failover handler when someone calls in sick right before shift start
     cursor = conn.cursor()
     cursor.execute(
         """
@@ -478,7 +454,6 @@ def trigger_sick_leave_failover(
 
 
 def reset_sick_leaves(conn: sqlite3.Connection, day: int = 1, shift_code: str = "S1") -> dict:
-    """Restore full 8-person shift crew."""
     conn.execute("DELETE FROM staff_exceptions WHERE exception_type = 'SICK_LEAVE';")
     conn.commit()
     assign_daily_stations(conn, day, shift_code)
@@ -486,7 +461,6 @@ def reset_sick_leaves(conn: sqlite3.Connection, day: int = 1, shift_code: str = 
 
 
 def get_dashboard_state(conn: sqlite3.Connection, day: int = 1, shift_code: str = "S1") -> dict:
-    """Return full JSON state for the Figma UI dashboard."""
     cursor = conn.cursor()
 
     cursor.execute(
@@ -496,7 +470,6 @@ def get_dashboard_state(conn: sqlite3.Connection, day: int = 1, shift_code: str 
     if cursor.fetchone()["cnt"] == 0:
         assign_daily_stations(conn, day, shift_code)
 
-    # 1. Hall metrics & KPI totals
     cursor.execute("SELECT zone_name, seating_capacity, current_2h_flow FROM hall_metrics;")
     halls_raw = cursor.fetchall()
     total_seats = sum(r["seating_capacity"] for r in halls_raw)
@@ -513,7 +486,7 @@ def get_dashboard_state(conn: sqlite3.Connection, day: int = 1, shift_code: str 
             **meta,
         })
 
-    # 2. Active station matrix (grouped into the exact 6 visual rows from Figma: 1-2 combined + 3..7)
+    # Combine stations 1 & 2 into a single row for the hot buffet line view
     cursor.execute(
         """
         SELECT r.station_id, st.station_name, s.id AS staff_id, s.name AS staff_name,
@@ -584,7 +557,6 @@ def get_dashboard_state(conn: sqlite3.Connection, day: int = 1, shift_code: str 
                 "rotation_badge": st_staff[0]["rotation_badge"],
             })
 
-    # 3. Time slots for Tour Group popup
     cursor.execute(
         """
         SELECT slot_id, time_window, zone_name, max_capacity, booked_guests,
@@ -595,7 +567,6 @@ def get_dashboard_state(conn: sqlite3.Connection, day: int = 1, shift_code: str 
     )
     time_slots = [dict(r) for r in cursor.fetchall()]
 
-    # 4. Recent booked tour groups
     cursor.execute(
         "SELECT group_id, operator_name, group_size, time_window, assigned_zone, assigned_waiter_name FROM tour_groups ORDER BY group_id DESC LIMIT 5;"
     )
@@ -621,7 +592,6 @@ def get_dashboard_state(conn: sqlite3.Connection, day: int = 1, shift_code: str 
 
 
 def format_crew_briefing(conn: sqlite3.Connection, day: int = 1, shift_code: str = "S1") -> str:
-    """Button 4: One-click Telegram / WhatsApp crew briefing text."""
     cursor = conn.cursor()
     cursor.execute("SELECT SUM(current_2h_flow) AS total_g FROM hall_metrics;")
     total_g = cursor.fetchone()["total_g"] or 1300
@@ -638,22 +608,17 @@ def format_crew_briefing(conn: sqlite3.Connection, day: int = 1, shift_code: str
         """,
         (day, shift_code),
     )
-    lines = [f"🌅 SUNRISE FLOW — SHIFT {shift_code} BRIEFING (Day {day} | Expected: {total_g} Guests / 2h)"]
+    lines = [f"[SUNRISE FLOW] SHIFT {shift_code} BRIEFING (Day {day} | Est. {total_g} Guests / 2h)"]
     for r in cursor.fetchall():
-        lines.append(f"• {r['station_name']}: {r['crew_names']}")
-    lines.append("✅ Please check your stations 10 mins before opening!")
+        lines.append(f"- {r['station_name']}: {r['crew_names']}")
+    lines.append("Check assigned stations 10 mins before doors open.")
     return "\n".join(lines)
 
 
 def export_director_csv(conn: sqlite3.Connection, day: int = 1, shift_code: str = "S1") -> str:
-    """
-    Button 3: Export Director CSV Report (including active shift stations AND 30-day monthly roster)
-    & create automatic DB snapshot in backups/ and root folder.
-    """
     os.makedirs(EXPORTS_DIR, exist_ok=True)
     os.makedirs(BACKUPS_DIR, exist_ok=True)
 
-    # Also ensure the standalone 30-day monthly schedule CSV is up to date
     export_monthly_schedule_csv(conn, total_days=30)
 
     state = get_dashboard_state(conn, day, shift_code)
@@ -678,7 +643,6 @@ def export_director_csv(conn: sqlite3.Connection, day: int = 1, shift_code: str 
         names = ", ".join([s["name"] for s in r["staff_list"]])
         rows_to_write.append([r["row_num"], r["station_title"], names, r["skill_logic"], r["rotation_badge"]])
 
-    # Append 30-Day Monthly Schedule section at the bottom of the Director Report
     cursor = conn.cursor()
     cursor.execute("SELECT id, staff_code, name, role_title, monthly_s1_count, monthly_s2_count, days_off_taken FROM staff ORDER BY id ASC;")
     staff_rows = [dict(r) for r in cursor.fetchall()]
@@ -707,7 +671,6 @@ def export_director_csv(conn: sqlite3.Connection, day: int = 1, shift_code: str 
 
 
 def get_active_context(conn: sqlite3.Connection) -> tuple:
-    """Read current active_day and active_shift from system_state table."""
     cur = conn.cursor()
     try:
         cur.execute("SELECT active_day, active_shift FROM system_state WHERE id = 1;")
@@ -720,7 +683,6 @@ def get_active_context(conn: sqlite3.Connection) -> tuple:
 
 
 def switch_shift_context(conn: sqlite3.Connection, day: int, shift_code: str) -> dict:
-    """Switch active dashboard view to a specific day (1..30) and shift ('S1' or 'S2')."""
     day = max(1, min(30, int(day)))
     shift_code = "S2" if shift_code == "S2" else "S1"
     cur = conn.cursor()
@@ -730,7 +692,6 @@ def switch_shift_context(conn: sqlite3.Connection, day: int, shift_code: str) ->
 
 
 def complete_shift_and_advance(conn: sqlite3.Connection, shift_hours: float = 6.0) -> dict:
-    """Complete the current shift, add hours, and advance to next shift."""
     day, shift_code = get_active_context(conn)
     cur = conn.cursor()
 
@@ -769,6 +730,6 @@ def complete_shift_and_advance(conn: sqlite3.Connection, shift_hours: float = 6.
     state = get_dashboard_state(conn, day=next_day, shift_code=next_shift)
     state["shift_completed_notice"] = (
         f"Closed Day {day} ({shift_code}): +{shift_hours}h added to {len(worked_ids)} crew. "
-        f"Now viewing Day {next_day} ({next_shift}) — station history & Dirty Dish rotation applied!"
+        f"Now viewing Day {next_day} ({next_shift})."
     )
     return state

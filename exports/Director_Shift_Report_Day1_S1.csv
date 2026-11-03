@@ -1,14 +1,14 @@
 SUNRISE RESORT — DIRECTOR SHIFT OPERATIONS REPORT
-Generated At,2026-10-22 21:26:25
+Generated At,2026-11-03 15:37:08
 Shift,Day 1 (S1)
 Total Seating Capacity,600
-2-Hour Guest Volume,1300
-Table Turnover Rate,2.17x
+2-Hour Guest Volume,1340
+Table Turnover Rate,2.23x
 Active Shift Crew,8 / 16
 Management Time Saved,36 minutes (-66.7% vs manual paper scheduling)
 
 Station #,Position / Hall,Assigned Crew,Skill & Bottleneck Logic,Rotation Status
-1–2,Hot Block-Massa #1 & #2,"Acting Shift Lead, Maria S.",Tier 3 • Acting Lead covers BOTH Block #1 & #2 on peak,50% Shift 1 / 50% Shift 2
+1–2,Hot Block-Massa #1 & #2,"Tymofii B., Maria S.",Tier 3 • Acting Lead covers BOTH Block #1 & #2 on peak,50% Shift 1 / 50% Shift 2
 3,Large Hall,"Elena M., Kaloyan T.",Tier 3 • High-speed table reset (2.26x turnover),Rotated from Shift 1
 4,Grand Terrace,Dimitar V.,Tier 2 • Fast outdoor table turnover (2.10x),Balanced monthly hours
 5,Small Hall,Hristo B.,Tier 1 • Protected station (after heavy shift / 29.0h),Protected (Easy station today)
@@ -17,7 +17,7 @@ Station #,Position / Hall,Assigned Crew,Skill & Bottleneck Logic,Rotation Status
 
 30-DAY MONTHLY SCHEDULE MATRIX (14 S1 / 14 S2 / 2 OFF)
 Staff Code,Name,Role,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,D16,D17,D18,D19,D20,D21,D22,D23,D24,D25,D26,D27,D28,D29,D30,S1,S2,OFF
-ST-01,Acting Shift Lead,Acting Shift Lead,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,14,14,2
+ST-01,Tymofii B.,Acting Shift Lead,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,14,14,2
 ST-02,Georgi K.,Hot Line Specialist,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,14,14,2
 ST-03,Elena M.,Senior Hall Waiter,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,14,14,2
 ST-04,Ivan P.,Hall Waiter,S2,S1,S2,S1,OFF,S1,S2,S1,S2,S1,S2,OFF,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,S2,S1,14,14,2
