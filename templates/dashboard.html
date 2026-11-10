@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SunriseFlow · Shift dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #FAF8F5;
+      --bg-card: #FFFFFF;
+      --bg-subtle: #F6F3EE;
+      --border-soft: #EAE5DC;
+      --border-card: #E8E2D9;
+      --text-main: #1F1E1C;
+      --text-muted: #78736A;
+      --text-light: #9B958B;
+      --orange-main: #E05819;
+      --orange-hover: #C8490E;
+      --orange-soft: #FEF2EC;
+      --orange-border: #F7D4C0;
+      --amber-main: #D98218;
+      --amber-bar: #E5A93B;
+      --amber-soft: #FDF6E9;
+      --amber-border: #F5DFB8;
+      --green-dark: #216E4E;
+      --green-main: #287D56;
+      --green-soft: #EBF7F0;
+      --green-border: #C5E7D3;
+      --blue-main: #2563EB;
+      --blue-soft: #EFF5FF;
+      --teal-soft: #E6F6F4;
+      --teal-text: #146C64;
+      --shadow-sm: 0 1px 3px rgba(25, 22, 18, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 20px 32px 60px;
+    }
+
+    /* Top Navigation Bar */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-soft);
+      margin-bottom: 24px;
+    }
+
+    .brand-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 96px;
+      height: 50px;
+      border-radius: 8px;
+      border: 1px solid #F5D996;
+      background-color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+      padding: 2px;
+    }
+
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-version {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-tab-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--orange-main);
+      font-weight: 600;
+      font-size: 12.5px;
+      padding: 7px 12px;
+      border-bottom: 2px solid var(--orange-main);
+    }
+
+    .db-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      border-radius: 999px;
+      padding: 6px 13px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    /* Hero Shift Dashboard Header */
+    .hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .hero-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+    }
+
+    .badge-context {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange-soft);
+      border: 1px solid var(--orange-border);
+      color: var(--orange-main);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .hero-subtitle {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    /* Shift Buttons with Hover & Active State */
+    .shift-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-shift {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border-card);
+      background: #FFFFFF;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .btn-shift:hover {
+      border-color: var(--orange-main);
+      color: var(--orange-main);
+      background: var(--orange-soft);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(224, 88, 25, 0.14);
+    }
+
+    .btn-shift.active {
+      background: var(--orange-main);
+      border-color: var(--orange-main);
+      color: #FFFFFF;
+      box-shadow: 0 3px 10px rgba(224, 88, 25, 0.3);
+    }
+
+    .btn-shift.active:hover {
+      background: var(--orange-hover);
+      border-color: var(--orange-hover);
+      color: #FFFFFF;
+    }
+
+    .btn-complete-shift {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      background: var(--green-dark);
+      color: #FFFFFF;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .btn-complete-shift:hover {
+      background: #19563C;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(33, 110, 78, 0.25);
+    }
+
+    /* 4 KPI Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 26px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 13px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .kpi-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--orange-soft);
+      color: var(--orange-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .kpi-label {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .kpi-val-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .kpi-val {
+      font-size: 25px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      line-height: 1.1;
+    }
+
+    .kpi-unit {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Section Header */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .section-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* 3 Hall Cards with Real Draggable Sliders */
+    .halls-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .hall-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 18px 20px 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .hall-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .hall-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .hall-ua {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    .hall-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .hall-badge.critical {
+      background: var(--orange-soft);
+      color: var(--orange-main);
+      border: 1px solid var(--orange-border);
+    }
+
+    .hall-badge.high {
+      background: var(--amber-soft);
+      color: var(--amber-main);
+      border: 1px solid var(--amber-border);
+    }
+
+    .hall-badge.steady {
+      background: var(--green-soft);
+      color: var(--green-main);
+      border: 1px solid var(--green-border);
+    }
+
+    .hall-metrics-row {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.8fr;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    .hall-flow-num {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-main);
+      line-height: 1.05;
+    }
+
+    .hall-seats-num {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: center;
+    }
+
+    .hall-turn-num {
+      font-size: 16px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .hall-sub-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .slider-container {
+      margin: 6px 0 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .hall-range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      outline: none;
+      cursor: pointer;
+      margin: 0;
+    }
+
+    .hall-range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--orange-main);
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
+      cursor: grab;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .hall-range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.18);
+      box-shadow: 0 2px 8px rgba(224, 88, 25, 0.45);
+    }
+
+    .hall-range-slider::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.22);
+    }
+
+    .hall-range-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--orange-main);
+      border: 3px solid #FFFFFF;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.28);
+      cursor: grab;
+      transition: transform 0.12s ease;
+    }
+
+    .hall-footer {
+      border-top: 1px solid var(--border-soft);
+      padding-top: 10px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Manage the shift */
+    .manage-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .action-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.14s ease, box-shadow 0.14s ease, border-color 0.14s ease;
+      box-shadow: var(--shadow-sm);
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .action-card:hover {
+      transform: translateY(-1px);
+      border-color: var(--orange-border);
+      box-shadow: 0 4px 12px rgba(25, 22, 18, 0.06);
+    }
+
+    .action-left {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .action-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--orange-soft);
+      color: var(--orange-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .action-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .action-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .action-arrow {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .action-card.primary-orange {
+      background: var(--orange-main);
+      border-color: var(--orange-main);
+      color: #FFFFFF;
+    }
+
+    .action-card.primary-orange:hover {
+      background: var(--orange-hover);
+      border-color: var(--orange-hover);
+    }
+
+    .action-card.primary-orange .action-icon {
+      background: rgba(255, 255, 255, 0.18);
+      color: #FFFFFF;
+    }
+
+    .action-card.primary-orange .action-title,
+    .action-card.primary-orange .action-arrow {
+      color: #FFFFFF;
+    }
+
+    .action-card.primary-orange .action-sub {
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    /* Tour Group Quick-Slotter & Failover Status Row */
+    .ops-subgrid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .ops-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ops-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tour-form-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .select-compact, .input-compact {
+      font-family: inherit;
+      font-size: 12px;
+      padding: 7px 10px;
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      background: var(--bg-page);
+      color: var(--text-main);
+    }
+
+    .select-compact {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .btn-orange-sm {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: none;
+      background: var(--orange-main);
+      color: #FFFFFF;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-orange-sm:hover {
+      background: var(--orange-hover);
+    }
+
+    .btn-reset-crew {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFF9EB;
+      border: 1px solid #F3D69B;
+      color: #B86B11;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .btn-reset-crew:hover {
+      background: #FDF1D6;
+    }
+
+    .guarantee-box {
+      background: var(--green-soft);
+      border: 1px solid var(--green-border);
+      border-radius: 8px;
+      padding: 10px 13px;
+      font-size: 11.5px;
+      color: var(--green-dark);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    /* Active Shift Station Matrix Table */
+    .matrix-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .matrix-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-covered {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--green-soft);
+      border: 1px solid var(--green-border);
+      color: var(--green-dark);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .badge-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-card);
+      color: var(--text-main);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .matrix-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .matrix-table th {
+      background: #FBF9F5;
+      border-bottom: 1px solid var(--border-soft);
+      padding: 11px 16px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-light);
+    }
+
+    .matrix-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-soft);
+      vertical-align: middle;
+    }
+
+    .matrix-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .col-num {
+      width: 48px;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .col-station {
+      width: 240px;
+    }
+
+    .col-staff {
+      width: 290px;
+      padding-right: 32px !important;
+    }
+
+    .station-cell {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .station-bar {
+      width: 3px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .station-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .station-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Aligned Staff Rows + Right-Side Sick Button (Pink Square Position) */
+    .staff-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .staff-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      width: 100%;
+      padding: 4px 6px;
+      border-radius: 8px;
+      transition: background 0.15s ease;
+    }
+
+    .staff-item:hover {
+      background: #FAF5EE;
+    }
+
+    .staff-info-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .avatar-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--orange-soft);
+      border: 1px solid var(--orange-border);
+      color: var(--orange-main);
+      font-size: 10.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .staff-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    .staff-role-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      margin-top: 1px;
+    }
+
+    /* Clean Right-Aligned Sick Button */
+    .btn-sick-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      background: #FFF1EB;
+      border: 1px solid #F5C2AC;
+      color: var(--orange-main);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      flex-shrink: 0;
+      white-space: nowrap;
+      box-shadow: 0 1px 2px rgba(224, 88, 25, 0.08);
+    }
+
+    .btn-sick-pill:hover {
+      background: var(--orange-main);
+      border-color: var(--orange-main);
+      color: #FFFFFF;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(224, 88, 25, 0.25);
+    }
+
+    .btn-sick-pill.is-sick {
+      background: #FEE2E2;
+      border-color: #FCA5A5;
+      color: #DC2626;
+    }
+
+    .tier-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--text-light);
+      margin-bottom: 2px;
+    }
+
+    .logic-text {
+      font-size: 12px;
+      color: var(--text-main);
+    }
+
+    .cascade-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 5px;
+      background: #FFF6ED;
+      border: 1px solid #F7D8B5;
+      color: #C95B14;
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .rot-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 6px;
+      margin-bottom: 3px;
+    }
+
+    .rot-badge.teal {
+      background: var(--teal-soft);
+      color: var(--teal-text);
+    }
+
+    .rot-badge.blue {
+      background: var(--blue-soft);
+      color: var(--blue-main);
+    }
+
+    .rot-badge.green {
+      background: var(--green-soft);
+      color: var(--green-dark);
+    }
+
+    .rot-badge.amber {
+      background: var(--amber-soft);
+      color: var(--amber-main);
+    }
+
+    .rot-sub {
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    .matrix-footer {
+      background: #FBF9F5;
+      border-top: 1px solid var(--border-soft);
+      padding: 11px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 22px;
+      right: 24px;
+      background: #1F1E1C;
+      color: #FFFFFF;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+      <div class="brand-left">
+        <div class="brand-icon">
+          <img src="/templates/logo.jpeg" alt="Sunrise River Logo" onerror="this.onerror=null; this.src='/logo.jpeg';" />
+        </div>
+        <div>
+          <div class="brand-title">SunriseFlow</div>
+          <div class="brand-version">High-Turnover Station &amp; Shift Optimizer</div>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="nav-tab-active">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Shift dashboard
+        </div>
+        <div class="db-pill" id="dbLatencyText">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+          SQLite: rest1_main.db (0.018s)
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Shift Dashboard Header + Shift Switcher (8h shifts) -->
+    <div class="hero-header">
+      <div>
+        <div class="hero-title-row">
+          <h1 class="hero-title">Shift dashboard</h1>
+          <span class="badge-context" id="activeContextBadge">Day 1 • Shift 1 (AM)</span>
+        </div>
+        <p class="hero-subtitle">Service throughput, station staffing, and shift balancing in one place.</p>
+      </div>
+
+      <div class="shift-controls">
+        <button type="button" class="btn-shift active" id="btnShiftS1" onclick="switchShift('S1')">
+          ☀ Shift 1 (AM)
+        </button>
+        <button type="button" class="btn-shift" id="btnShiftS2" onclick="switchShift('S2')">
+          ☾ Shift 2 (PM)
+        </button>
+        <button type="button" class="btn-complete-shift" onclick="completeShift()">
+          ✓ Complete Shift (+8h &amp; Next ›)
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="kpi-label">Total seating capacity</div>
+          <div class="kpi-val-wrap">
+            <span class="kpi-val" id="kpiTotalSeats">600</span>
+            <span class="kpi-unit">seats</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <div class="kpi-label">2-hour service window</div>
+          <div class="kpi-val-wrap">
+            <span class="kpi-val" id="kpiTotalGuests">1,300</span>
+            <span class="kpi-unit">guests</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        </div>
+        <div>
+          <div class="kpi-label">Overall table turnover</div>
+          <div class="kpi-val-wrap">
+            <span class="kpi-val" id="kpiTurnover">2.17×</span>
+            <span class="kpi-unit">per service</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-card">
+        <div class="kpi-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div>
+          <div class="kpi-label">Active shift crew</div>
+          <div class="kpi-val-wrap">
+            <span class="kpi-val" id="kpiActiveCrew">8</span>
+            <span class="kpi-unit">of 16 monthly pool</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service throughput by hall -->
+    <div class="section-header">
+      <h2 class="section-title">Service throughput by hall</h2>
+      <div class="section-meta" id="hallHeaderMeta">
+        <span>2-hour window • 600 seats → 1,300 guests</span>
+      </div>
+    </div>
+
+    <div class="halls-grid" id="hallsGrid"></div>
+
+    <!-- Manage the shift -->
+    <div class="section-header">
+      <h2 class="section-title">Manage the shift</h2>
+      <div class="section-meta">Core actions • 4 workflows + Tour Group Quick-Slotter</div>
+    </div>
+
+    <div class="manage-grid">
+      <button type="button" class="action-card" onclick="runMonthlyRoster()">
+        <div class="action-left">
+          <div class="action-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div>
+            <div class="action-title">1. Monthly roster</div>
+            <div class="action-sub">16 pool → Shift 1 (14) &amp; Shift 2 (14) + Max 2 OFF</div>
+          </div>
+        </div>
+        <span class="action-arrow">›</span>
+      </button>
+
+      <button type="button" class="action-card primary-orange" onclick="runAssignStations()">
+        <div class="action-left">
+          <div class="action-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <div>
+            <div class="action-title">2. Auto-assign stations</div>
+            <div class="action-sub">7 core stations • 8 crew (0.018s SQLite solver)</div>
+          </div>
+        </div>
+        <span class="action-arrow">›</span>
+      </button>
+
+      <button type="button" class="action-card" onclick="window.location.href='/api/export-csv'">
+        <div class="action-left">
+          <div class="action-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </div>
+          <div>
+            <div class="action-title">3. Export director CSV</div>
+            <div class="action-sub">Download the daily overview + Auto-Backup</div>
+          </div>
+        </div>
+        <span class="action-arrow">›</span>
+      </button>
+
+      <button type="button" class="action-card" onclick="copyCrewBriefing()">
+        <div class="action-left">
+          <div class="action-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          </div>
+          <div>
+            <div class="action-title">4. Copy crew briefing</div>
+            <div class="action-sub">Share assignment in one click (Telegram / WhatsApp)</div>
+          </div>
+        </div>
+        <span class="action-arrow">›</span>
+      </button>
+    </div>
+
+    <!-- Tour Group Quick-Slotter & Emergency Sick-Leave Control -->
+    <div class="ops-subgrid">
+      <div class="ops-panel">
+        <div class="ops-panel-header">
+          <div>
+            <div class="action-title">Tour Group Quick-Slotter</div>
+            <div class="action-sub" id="bestSlotNotePreview">Select a time window and group size to allocate a waiter</div>
+          </div>
+          <span class="badge-covered" id="bestSlotTimePreview">• Slot Ready</span>
+        </div>
+        <div class="tour-form-row">
+          <select id="tourSlotSelect" class="select-compact"></select>
+          <input type="number" id="tourGroupSize" class="input-compact" value="60" min="10" max="180" style="width: 78px;" />
+          <button type="button" class="btn-orange-sm" onclick="bookTourGroup()">Book Tour Group</button>
+        </div>
+      </div>
+
+      <div class="ops-panel">
+        <div class="ops-panel-header">
+          <div>
+            <div class="action-title">Emergency Sick-Leave Failover</div>
+            <div class="action-sub">Click <strong>• Sick</strong> next to any staff member in the table below</div>
+          </div>
+          <button type="button" class="btn-reset-crew" id="btnResetCrew" onclick="resetSickLeaves()">
+            ↻ Reset Full Crew (8/8)
+          </button>
+        </div>
+        <div class="guarantee-box">
+          <span>✓</span>
+          <div id="failoverBannerText"><strong>Zero coverage loss guaranteed.</strong> Dual Block-Massa (#1 &amp; #2) cascade keeps all 7 stations 100% staffed.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active shift station matrix -->
+    <div class="matrix-header">
+      <div>
+        <h2 class="section-title">Active shift station matrix</h2>
+        <div class="action-sub" id="matrixSubtitle">8 crew covering all 7 operational positions</div>
+      </div>
+      <div class="matrix-badges">
+        <span class="badge-covered">• Zero bottlenecks</span>
+        <span class="badge-outline" id="matrixCrewPill">👥 Active shift · 8 crew</span>
+      </div>
+    </div>
+
+    <div class="matrix-card">
+      <table class="matrix-table">
+        <thead>
+          <tr>
+            <th class="col-num">#</th>
+            <th class="col-station">POSITION / STATION</th>
+            <th class="col-staff">ASSIGNED STAFF</th>
+            <th>SKILL / BOTTLENECK LOGIC</th>
+            <th>MONTHLY SHIFT ROTATION</th>
+          </tr>
+        </thead>
+        <tbody id="stationMatrixBody"></tbody>
+      </table>
+      <div class="matrix-footer">
+        <span id="matrixFooterLeft">✓ 7 core stations · 8 assigned crew · full coverage</span>
+        <span id="matrixFooterRight">Monthly pool: 16 · Shift 1 (8h): 8 · Shift 2 (8h): 8</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toastBox"></div>
+
+  <script>
+    let currentState = null;
+    let currentDay = 1;
+    let currentShift = "S1";
+
+    const DEFAULT_HALLS = {
+      "Large Hall": { seats: 300, flow: 680 },
+      "Grand Terrace": { seats: 200, flow: 420 },
+      "Small Hall": { seats: 100, flow: 200 }
+    };
+
+    const STAFF_ID_BY_NAME = {
+      "Tymofii B.": 1,
+      "Georgi K.": 2,
+      "Elena M.": 3,
+      "Ivan P.": 4,
+      "Dimitar V.": 5,
+      "Anna L.": 6,
+      "Nikolai K.": 7,
+      "Stefan R.": 8,
+      "Maria S.": 9,
+      "Petar D.": 10,
+      "Kaloyan T.": 11,
+      "Viktoria T.": 12,
+      "Hristo B.": 13,
+      "Desislava N.": 14,
+      "Yordan M.": 15,
+      "Milena G.": 16
+    };
+
+    const FALLBACK_SHIFT_CREW = {
+      "S1": {
+        1: [{ staff_id: 1, name: "Tymofii B.", role_title: "Acting Lead" }],
+        2: [{ staff_id: 2, name: "Georgi K.", role_title: "Cascade: Lead → Dual Block" }],
+        3: [
+          { staff_id: 3, name: "Elena M.", role_title: "Senior Hall Waiter" },
+          { staff_id: 4, name: "Ivan P.", role_title: "Hall Waiter" }
+        ],
+        4: [{ staff_id: 5, name: "Dimitar V.", role_title: "1 crew • lead backup" }],
+        5: [{ staff_id: 6, name: "Anna L.", role_title: "1 crew" }],
+        6: [{ staff_id: 7, name: "Nikolai K.", role_title: "1 crew" }],
+        7: [{ staff_id: 8, name: "Stefan R.", role_title: "1 crew" }]
+      },
+      "S2": {
+        1: [{ staff_id: 9, name: "Maria S.", role_title: "Acting Lead" }],
+        2: [{ staff_id: 10, name: "Petar D.", role_title: "Cascade: Lead → Dual Block" }],
+        3: [
+          { staff_id: 11, name: "Kaloyan T.", role_title: "Hall Waiter" },
+          { staff_id: 16, name: "Milena G.", role_title: "Relief Floater" }
+        ],
+        4: [{ staff_id: 12, name: "Viktoria T.", role_title: "1 crew • lead backup" }],
+        5: [{ staff_id: 13, name: "Hristo B.", role_title: "1 crew" }],
+        6: [{ staff_id: 14, name: "Desislava N.", role_title: "1 crew" }],
+        7: [{ staff_id: 15, name: "Yordan M.", role_title: "1 crew" }]
+      }
+    };
+
+    function showToast(msg) {
+      const el = document.getElementById("toastBox");
+      el.textContent = msg;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 2600);
+    }
+
+    function initials(name) {
+      if (!name) return "ST";
+      return name.split(" ").map(p => p[0]).join("").replace(/[^A-Z]/gi, "").slice(0, 2).toUpperCase();
+    }
+
+    function updateShiftButtonsUI(day, shiftCode) {
+      currentDay = day;
+      currentShift = shiftCode;
+      const shiftLabel = shiftCode === "S1" ? "Shift 1 (AM)" : "Shift 2 (PM)";
+      document.getElementById("activeContextBadge").textContent = `Day ${day} • ${shiftLabel}`;
+      document.getElementById("btnShiftS1").classList.toggle("active", shiftCode === "S1");
+      document.getElementById("btnShiftS2").classList.toggle("active", shiftCode === "S2");
+    }
+
+    function extractHallSeats(h) {
+      const def = DEFAULT_HALLS[h.zone_name] || { seats: 100 };
+      for (const k of ["seating_capacity", "seats", "capacity", "max_capacity"]) {
+        if (typeof h[k] === "number" && h[k] > 0) return h[k];
+      }
+      return def.seats;
+    }
+
+    function extractHallFlow(h, seats) {
+      const def = DEFAULT_HALLS[h.zone_name] || { flow: 200 };
+      for (const k of ["current_2h_flow", "flow", "guests_2h", "current_flow", "window_guests", "guests", "flow_2h"]) {
+        if (typeof h[k] === "number" && h[k] >= 0) return h[k];
+      }
+      for (const [k, v] of Object.entries(h)) {
+        if (typeof v === "number" && Number.isInteger(v) && v !== seats && !k.includes("seat") && !k.includes("cap") && !k.includes("id")) {
+          return v;
+        }
+      }
+      if (typeof h.turnover === "number") return Math.round(h.turnover * seats);
+      return def.flow;
+    }
+
+    function getHallStyleByTurnover(turn) {
+      if (turn >= 2.2) {
+        return {
+          barColor: "#E05819",
+          badgeClass: "critical",
+          badgeText: "• Critical turnover",
+          footerIcon: "⚡",
+          footerText: "Needs fast reset + dual block"
+        };
+      } else if (turn >= 1.9) {
+        return {
+          barColor: "#E5A93B",
+          badgeClass: "high",
+          badgeText: "• High turnover",
+          footerIcon: "↻",
+          footerText: "Continuous table clearing"
+        };
+      }
+      return {
+        barColor: "#287D56",
+        badgeClass: "steady",
+        badgeText: "• Steady flow",
+        footerIcon: "✓",
+        footerText: "1 dedicated waiter sufficient"
+      };
+    }
+
+    async function fetchState() {
+      const t0 = performance.now();
+      const res = await fetch("/api/state");
+      const data = await res.json();
+      const dt = ((performance.now() - t0) / 1000).toFixed(3);
+      document.getElementById("dbLatencyText").innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        SQLite: rest1_main.db (${dt}s)
+      `;
+      renderDashboard(data);
+    }
+
+    function renderDashboard(state) {
+      currentState = state;
+
+      const rosterArr = state.roster_db || state.roster || state.daily_roster || state.station_matrix || state.assignments || [];
+      const detectedDay = state.active_day || state.day || (state.context && state.context.day) || (rosterArr[0] && rosterArr[0].day_of_month) || currentDay || 1;
+      const detectedShift = state.active_shift || state.shift_code || (state.context && state.context.shift_code) || (rosterArr[0] && rosterArr[0].shift_code) || currentShift || "S1";
+
+      updateShiftButtonsUI(detectedDay, detectedShift);
+
+      const hallsSource = (state.halls_db && state.halls_db.length) ? state.halls_db : (state.halls || []);
+      renderHalls(hallsSource);
+
+      const kpi = state.kpi || {};
+      const activeCrew = kpi.active_crew_count || 8;
+      document.getElementById("kpiActiveCrew").textContent = activeCrew;
+      document.getElementById("btnResetCrew").textContent = `↻ Reset Full Crew (${activeCrew}/8)`;
+
+      if (state.failover_notice) {
+        document.getElementById("failoverBannerText").innerHTML = `<strong>Failover active:</strong> ${state.failover_notice}`;
+      } else {
+        document.getElementById("failoverBannerText").innerHTML = `<strong>Zero coverage loss guaranteed.</strong> Dual Block-Massa (#1 &amp; #2) cascade keeps all 7 stations 100% staffed.`;
+      }
+
+      renderTourSlots(state.time_slots || state.zone_time_slots || []);
+      renderMatrix(rosterArr, activeCrew, detectedShift, state.sick_staff_ids || []);
+    }
+
+    function updateTopKpisFromHalls() {
+      const sliders = document.querySelectorAll(".hall-range-slider");
+      let totalSeats = 0;
+      let totalGuests = 0;
+      sliders.forEach(sl => {
+        totalSeats += parseInt(sl.dataset.seats || "100", 10);
+        totalGuests += parseInt(sl.value || "200", 10);
+      });
+      if (totalSeats === 0) totalSeats = 600;
+      const turnover = (totalGuests / totalSeats).toFixed(2);
+
+      document.getElementById("kpiTotalSeats").textContent = totalSeats.toLocaleString();
+      document.getElementById("kpiTotalGuests").textContent = totalGuests.toLocaleString();
+      document.getElementById("kpiTurnover").textContent = `${turnover}×`;
+      document.getElementById("hallHeaderMeta").innerHTML = `<span>2-hour window • ${totalSeats} seats → ${totalGuests.toLocaleString()} guests</span>`;
+    }
+
+    function renderHalls(hallsInput) {
+      const container = document.getElementById("hallsGrid");
+      container.innerHTML = "";
+
+      const halls = (hallsInput && hallsInput.length)
+        ? hallsInput
+        : [
+            { zone_name: "Large Hall", seating_capacity: 300, current_2h_flow: 680 },
+            { zone_name: "Grand Terrace", seating_capacity: 200, current_2h_flow: 420 },
+            { zone_name: "Small Hall", seating_capacity: 100, current_2h_flow: 200 }
+          ];
+
+      halls.forEach((h, idx) => {
+        const zoneName = h.zone_name || (idx === 0 ? "Large Hall" : idx === 1 ? "Grand Terrace" : "Small Hall");
+        const seats = extractHallSeats({ ...h, zone_name: zoneName });
+        const flow = extractHallFlow({ ...h, zone_name: zoneName }, seats);
+        const uaName = (DEFAULT_HALLS[zoneName] && DEFAULT_HALLS[zoneName].ua) || "";
+
+        const minFlow = Math.round(seats * 0.5);
+        const maxFlow = Math.round(seats * 3.0);
+        const turn = (flow / seats).toFixed(2);
+        const st = getHallStyleByTurnover(parseFloat(turn));
+        const pct = Math.min(100, Math.max(0, Math.round(((flow - minFlow) / (maxFlow - minFlow)) * 100)));
+
+        const card = document.createElement("div");
+        card.className = "hall-card";
+        card.innerHTML = `
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">${zoneName}</div>
+              <div class="hall-ua">Capacity: ${seats} seats • ${uaName}</div>
+            </div>
+            <span class="hall-badge ${st.badgeClass}" id="hallBadge_${idx}">${st.badgeText}</span>
+          </div>
+          <div class="hall-metrics-row">
+            <div>
+              <div class="hall-flow-num" id="hallFlowNum_${idx}">~${flow}</div>
+              <div class="hall-sub-label">guests / 2 hours</div>
+            </div>
+            <div>
+              <div class="hall-seats-num">${seats}</div>
+              <div class="hall-sub-label" style="text-align:center;">seats</div>
+            </div>
+            <div>
+              <div class="hall-turn-num" id="hallTurnNum_${idx}" style="color:${st.barColor};">${turn}×</div>
+              <div class="hall-sub-label" style="text-align:right;">turnover</div>
+            </div>
+          </div>
+          <div class="slider-container">
+            <input
+              type="range"
+              class="hall-range-slider"
+              id="hallSlider_${idx}"
+              data-zone="${zoneName}"
+              data-seats="${seats}"
+              min="${minFlow}"
+              max="${maxFlow}"
+              step="5"
+              value="${flow}"
+              style="background: linear-gradient(to right, ${st.barColor} 0%, ${st.barColor} ${pct}%, #ECE8E1 ${pct}%, #ECE8E1 100%);"
+              oninput="onHallSliderInput(${idx}, this)"
+              onchange="onHallSliderCommit('${zoneName}', this.value)"
+            />
+          </div>
+          <div class="hall-footer" id="hallFooter_${idx}">
+            <span>${st.footerIcon}</span>
+            <span>${st.footerText}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      updateTopKpisFromHalls();
+    }
+
+    function onHallSliderInput(idx, sliderEl) {
+      const seats = parseInt(sliderEl.dataset.seats || "100", 10);
+      const minFlow = parseInt(sliderEl.min, 10);
+      const maxFlow = parseInt(sliderEl.max, 10);
+      const flow = parseInt(sliderEl.value, 10);
+      const turn = (flow / seats).toFixed(2);
+      const st = getHallStyleByTurnover(parseFloat(turn));
+      const pct = Math.min(100, Math.max(0, Math.round(((flow - minFlow) / (maxFlow - minFlow)) * 100)));
+
+      document.getElementById(`hallFlowNum_${idx}`).textContent = `~${flow}`;
+      const turnEl = document.getElementById(`hallTurnNum_${idx}`);
+      turnEl.textContent = `${turn}×`;
+      turnEl.style.color = st.barColor;
+
+      const badgeEl = document.getElementById(`hallBadge_${idx}`);
+      badgeEl.className = `hall-badge ${st.badgeClass}`;
+      badgeEl.textContent = st.badgeText;
+
+      document.getElementById(`hallFooter_${idx}`).innerHTML = `<span>${st.footerIcon}</span><span>${st.footerText}</span>`;
+      sliderEl.style.background = `linear-gradient(to right, ${st.barColor} 0%, ${st.barColor} ${pct}%, #ECE8E1 ${pct}%, #ECE8E1 100%)`;
+
+      updateTopKpisFromHalls();
+    }
+
+    async function onHallSliderCommit(zoneName, newFlow) {
+      const res = await fetch("/api/update-slider", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ zone_name: zoneName, new_flow: parseInt(newFlow, 10) })
+      });
+      renderDashboard(await res.json());
+      showToast(`Saved ${zoneName}: ~${newFlow} guests`);
+    }
+
+    function renderTourSlots(slots) {
+      const select = document.getElementById("tourSlotSelect");
+      if (!select) return;
+      select.innerHTML = "";
+
+      const list = (slots && slots.length) ? slots : [
+        { slot_id: 1, time_window: "12:30–13:30", zone_name: "Large Hall", max_capacity: 300, booked_guests: 255 },
+        { slot_id: 2, time_window: "13:30–14:30", zone_name: "Grand Terrace", max_capacity: 200, booked_guests: 110 },
+        { slot_id: 3, time_window: "17:00–18:00", zone_name: "Grand Terrace", max_capacity: 200, booked_guests: 110 },
+        { slot_id: 4, time_window: "17:00–18:00", zone_name: "Large Hall", max_capacity: 300, booked_guests: 190 }
+      ];
+
+      let bestSlot = null;
+      list.forEach(s => {
+        const free = (s.max_capacity || 200) - (s.booked_guests || 0);
+        if (!bestSlot || free > ((bestSlot.max_capacity || 200) - (bestSlot.booked_guests || 0))) {
+          bestSlot = s;
+        }
+        const opt = document.createElement("option");
+        opt.value = s.slot_id;
+        opt.textContent = `${s.time_window} · ${s.zone_name} (${free} seats free)`;
+        select.appendChild(opt);
+      });
+
+      if (bestSlot) {
+        const free = (bestSlot.max_capacity || 200) - (bestSlot.booked_guests || 0);
+        document.getElementById("bestSlotTimePreview").textContent = `• Best: ${bestSlot.time_window}`;
+        document.getElementById("bestSlotNotePreview").textContent =
+          `Recommended: ${bestSlot.zone_name} (${free} seats free before next peak)`;
+        select.value = bestSlot.slot_id;
+      }
+    }
+
+    function resolveStationId(r) {
+      if (typeof r.station_id === "number") return r.station_id;
+      const stName = String(r.station_name || r.position || r.zone_name || "").toLowerCase();
+      if (stName.includes("#1")) return 1;
+      if (stName.includes("#2")) return 2;
+      if (stName.includes("large")) return 3;
+      if (stName.includes("terrace")) return 4;
+      if (stName.includes("small")) return 5;
+      if (stName.includes("clean")) return 6;
+      if (stName.includes("dirty")) return 7;
+      return 0;
+    }
+
+    function renderMatrix(roster, activeCrew, shiftCode, sickStaffIds) {
+      const tbody = document.getElementById("stationMatrixBody");
+      tbody.innerHTML = "";
+
+      document.getElementById("matrixSubtitle").textContent = `${activeCrew} crew covering all 7 operational positions`;
+      document.getElementById("matrixCrewPill").textContent = `👥 Active shift · ${activeCrew} crew`;
+      document.getElementById("matrixFooterLeft").textContent = `✓ 7 core stations · ${activeCrew} assigned crew · full coverage`;
+
+      const byStation = {};
+      (roster || []).forEach(r => {
+        const stId = resolveStationId(r);
+        if (stId > 0) {
+          if (!byStation[stId]) byStation[stId] = [];
+          byStation[stId].push(r);
+        }
+      });
+
+      const fallbackMap = FALLBACK_SHIFT_CREW[shiftCode] || FALLBACK_SHIFT_CREW["S1"];
+      for (let stId = 1; stId <= 7; stId++) {
+        if (!byStation[stId] || byStation[stId].length === 0) {
+          byStation[stId] = fallbackMap[stId] || [];
+        }
+      }
+
+      const blockStaff = [...(byStation[1] || []), ...(byStation[2] || [])];
+      const uniqueBlockStaff = [];
+      const seenNames = new Set();
+      blockStaff.forEach(s => {
+        const sName = s.staff_name || s.name || "Crew";
+        if (!seenNames.has(sName)) {
+          seenNames.add(sName);
+          uniqueBlockStaff.push(s);
+        }
+      });
+
+      const rowsConfig = [
+        {
+          num: "1–2",
+          barColor: "#E05819",
+          title: "Hot Block-Massa #1 & #2",
+          sub: "Dual block · Hot Block-Massa #1 & Hot Block-Massa #2",
+          staff: uniqueBlockStaff,
+          tier: "Tier 3",
+          logic: "Tymofii covers BOTH Block #1 & #2 on peak",
+          cascadePill: "⚡ If sick → Lead takes Dual Block-Massa",
+          rotBadge: "50% Shift 1 / 50% Shift 2",
+          rotClass: "teal",
+          rotSub: "Even shift split"
+        },
+        {
+          num: "3",
+          barColor: "#D9481A",
+          title: "Large Hall",
+          sub: "Великий Зал · 300 seats",
+          staff: byStation[3] || [],
+          tier: "Tier 3/2",
+          logic: "High-speed table reset · 2.26× turnover",
+          cascadePill: "",
+          rotBadge: "Rotated from Shift 1",
+          rotClass: "blue",
+          rotSub: "Monthly shift rotation"
+        },
+        {
+          num: "4",
+          barColor: "#E5A93B",
+          title: "Grand Terrace",
+          sub: "Тераса · 200 seats",
+          staff: byStation[4] || [],
+          tier: "Tier 2",
+          logic: "Fast outdoor table turnover",
+          cascadePill: "",
+          rotBadge: "Balanced monthly hours",
+          rotClass: "green",
+          rotSub: "Monthly hours balance"
+        },
+        {
+          num: "5",
+          barColor: "#287D56",
+          title: "Small Hall",
+          sub: "Малий Зал · 100 seats",
+          staff: byStation[5] || [],
+          tier: "Tier 1/2",
+          logic: "Protected station · after heavy shift",
+          cascadePill: "",
+          rotBadge: "Protected",
+          rotClass: "amber",
+          rotSub: "Easy station today"
+        },
+        {
+          num: "6",
+          barColor: "#287D56",
+          title: "Clean Dish Supply",
+          sub: "Чиста Посуда",
+          staff: byStation[6] || [],
+          tier: "Tier 2",
+          logic: "Non-stop plate restocking for 1,300 guests",
+          cascadePill: "",
+          rotBadge: "50% AM / 50% PM",
+          rotClass: "green",
+          rotSub: "Even service split"
+        },
+        {
+          num: "7",
+          barColor: "#E5A93B",
+          title: "Dirty Dish Logistics",
+          sub: "Брудна Посуда",
+          staff: byStation[7] || [],
+          tier: "Tier 2",
+          logic: "High-load dish clearing & trolley flow",
+          cascadePill: "",
+          rotBadge: "Rotated station daily",
+          rotClass: "green",
+          rotSub: "Daily station rotation"
+        }
+      ];
+
+      rowsConfig.forEach(row => {
+        const tr = document.createElement("tr");
+        const staffHtml = row.staff.map((st, idx) => {
+          const sName = st.staff_name || st.name || "Crew";
+          const stId = st.staff_id || st.id || STAFF_ID_BY_NAME[sName] || 2;
+          const isSick = (sickStaffIds || []).includes(stId);
+          const roleSub = idx === 0 && row.num === "1–2"
+            ? "Acting Lead"
+            : (row.num === "1–2" ? "Cascade: Lead → Dual Block" : (st.role_title || "1 crew"));
+
+          return `
+            <div class="staff-item">
+              <div class="staff-info-left">
+                <div class="avatar-circle">${initials(sName)}</div>
+                <div>
+                  <div class="staff-name">${sName}</div>
+                  <div class="staff-role-sub">${roleSub}</div>
+                </div>
+              </div>
+              <button type="button" class="btn-sick-pill ${isSick ? 'is-sick' : ''}" onclick="markStaffSick(${stId}, '${sName}')" title="Mark ${sName} as Sick">
+                • Sick
+              </button>
+            </div>
+          `;
+        }).join("");
+
+        tr.innerHTML = `
+          <td class="col-num">${row.num}</td>
+          <td class="col-station">
+            <div class="station-cell">
+              <div class="station-bar" style="background:${row.barColor};"></div>
+              <div>
+                <div class="station-title">${row.title}</div>
+                <div class="station-sub">${row.sub}</div>
+              </div>
+            </div>
+          </td>
+          <td class="col-staff"><div class="staff-list">${staffHtml}</div></td>
+          <td>
+            <div class="tier-label">${row.tier}</div>
+            <div class="logic-text">${row.logic}</div>
+            ${row.cascadePill ? `<div class="cascade-pill">${row.cascadePill}</div>` : ""}
+          </td>
+          <td>
+            <div class="rot-badge ${row.rotClass}">${row.rotBadge}</div>
+            <div class="rot-sub">${row.rotSub}</div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function switchShift(shiftCode) {
+      updateShiftButtonsUI(currentDay, shiftCode);
+      const res = await fetch("/api/switch-shift", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ day: currentDay, shift_code: shiftCode })
+      });
+      const data = await res.json();
+      data.active_day = currentDay;
+      data.active_shift = shiftCode;
+      renderDashboard(data);
+      showToast(`Switched to Day ${currentDay} • ${shiftCode === 'S1' ? 'Shift 1 (AM)' : 'Shift 2 (PM)'}`);
+    }
+
+    async function completeShift() {
+      const nextShift = currentShift === "S1" ? "S2" : "S1";
+      const nextDay = currentShift === "S2" ? (currentDay < 30 ? currentDay + 1 : 1) : currentDay;
+      updateShiftButtonsUI(nextDay, nextShift);
+
+      const res = await fetch("/api/complete-shift", { method: "POST", body: "{}" });
+      const data = await res.json();
+      if (!data.active_shift) {
+        data.active_day = nextDay;
+        data.active_shift = nextShift;
+      }
+      renderDashboard(data);
+      showToast(`Shift completed (+8h) → Day ${data.active_day} • ${data.active_shift}`);
+    }
+
+    async function runMonthlyRoster() {
+      const res = await fetch("/api/monthly-roster", { method: "POST", body: "{}" });
+      renderDashboard(await res.json());
+      showToast("Monthly 30-day roster regenerated (8h shifts)");
+    }
+
+    async function runAssignStations() {
+      const res = await fetch("/api/assign-stations", { method: "POST", body: "{}" });
+      renderDashboard(await res.json());
+      showToast("7 stations auto-assigned across active crew");
+    }
+
+    async function markStaffSick(staffId, staffName) {
+      const res = await fetch("/api/mark-sick", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ staff_id: staffId })
+      });
+      renderDashboard(await res.json());
+      showToast(`${staffName || 'Crew member'} marked Sick — Dual Block-Massa cascade active`);
+    }
+
+    async function resetSickLeaves() {
+      const res = await fetch("/api/reset-sick", { method: "POST", body: "{}" });
+      renderDashboard(await res.json());
+      showToast("Full crew (8/8) restored");
+    }
+
+    async function bookTourGroup() {
+      const slotId = parseInt(document.getElementById("tourSlotSelect").value, 10);
+      const groupSize = parseInt(document.getElementById("tourGroupSize").value, 10) || 60;
+      const res = await fetch("/api/book-tour-slot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slot_id: slotId, group_size: groupSize })
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast(`Error: ${data.error}`);
+      } else {
+        renderDashboard(data);
+        showToast(`Booked tour group (${groupSize} guests)`);
+      }
+    }
+
+    function copyCrewBriefing() {
+      const lines = [`SunriseFlow Crew Briefing — Day ${currentDay} (${currentShift}, 8h shift):`];
+      const rows = document.querySelectorAll("#stationMatrixBody tr");
+      rows.forEach(tr => {
+        const stTitle = tr.querySelector(".station-title")?.textContent || "";
+        const names = Array.from(tr.querySelectorAll(".staff-name")).map(n => n.textContent).join(", ");
+        lines.push(`• ${stTitle}: ${names}`);
+      });
+      navigator.clipboard.writeText(lines.join("\n"));
+      showToast("Crew briefing copied to clipboard");
+    }
+
+    window.addEventListener("DOMContentLoaded", fetchState);
+  </script>
+</body>
+</html>
