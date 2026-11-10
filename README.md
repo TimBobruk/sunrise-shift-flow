@@ -4,7 +4,7 @@ Shift scheduling and station allocation tool built for **Sunrise River Beach Res
 
 I wrote this project after working as an Acting Shift Lead managing buffet operations across 3 dining halls (**600 seats**, **~1,300 guests per 2-hour peak window**, **$2.17\times$ table turnover**). Previously, building monthly rosters and rebalancing 7 stations when someone called in sick was done on paper and took ~45 minutes per shift.
 
-![SunriseFlow Dashboard UI](dashboard.png)
+![SunriseFlow Dashboard UI](./dashboard.png)
 
 ## What It Solves
 
